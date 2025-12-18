@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCNA 200-301 Interactive Study Hub</title>
+    <meta name="description" content="An interactive, gamified study experience for the CCNA 200-301 certification exam">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="fluid-background">
+        <div class="fluid-shape shape-1"></div>
+        <div class="fluid-shape shape-2"></div>
+        <div class="fluid-shape shape-3"></div>
+        <div class="network-grid"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-brand">
+            <div class="logo-icon">
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" stroke="url(#logoGrad)" stroke-width="2"/>
+                    <circle cx="20" cy="12" r="4" fill="url(#logoGrad)"/>
+                    <circle cx="12" cy="26" r="4" fill="url(#logoGrad)"/>
+                    <circle cx="28" cy="26" r="4" fill="url(#logoGrad)"/>
+                    <line x1="20" y1="16" x2="15" y2="23" stroke="url(#logoGrad)" stroke-width="2"/>
+                    <line x1="20" y1="16" x2="25" y2="23" stroke="url(#logoGrad)" stroke-width="2"/>
+                    <line x1="16" y1="26" x2="24" y2="26" stroke="url(#logoGrad)" stroke-width="2"/>
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                            <stop offset="0%" stop-color="#00d4ff"/>
+                            <stop offset="100%" stop-color="#7c3aed"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <span class="brand-text">CCNA<span class="brand-accent">Hub</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link active" data-view="home">
+                <span class="nav-icon">🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-link" data-view="topics">
+                <span class="nav-icon">📚</span>
+                <span>Topics</span>
+            </a>
+            <a href="#" class="nav-link" data-view="flashcards">
+                <span class="nav-icon">🎴</span>
+                <span>Flashcards</span>
+            </a>
+            <a href="#" class="nav-link" data-view="quiz">
+                <span class="nav-icon">🧠</span>
+                <span>Quiz</span>
+            </a>
+            <a href="#" class="nav-link" data-view="progress">
+                <span class="nav-icon">📊</span>
+                <span>Progress</span>
+            </a>
+        </div>
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                <span class="sun-icon">☀️</span>
+                <span class="moon-icon">🌙</span>
+            </button>
+            <div class="streak-badge">
+                <span class="streak-fire">🔥</span>
+                <span class="streak-count" id="streakCount">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home View -->
+        <section class="view home-view active" id="homeView">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-badge">🚀 Interactive Learning</div>
+                    <h1 class="hero-title">
+                        Master <span class="gradient-text">CCNA 200-301</span>
+                        <br>The Fun Way
+                    </h1>
+                    <p class="hero-description">
+                        Transform your CCNA study journey with interactive flashcards, 
+                        quizzes, and gamified progress tracking. Make networking concepts stick!
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary btn-lg" data-action="start-learning">
+                            <span>Start Learning</span>
+                            <span class="btn-arrow">→</span>
+                        </button>
+                        <button class="btn btn-secondary btn-lg" data-action="quick-quiz">
+                            <span>Quick Quiz</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="stats-grid">
+                        <div class="stat-card" data-stat="topics">
+                            <div class="stat-icon">📖</div>
+                            <div class="stat-value" id="totalTopics">66</div>
+                            <div class="stat-label">Topics</div>
+                        </div>
+                        <div class="stat-card" data-stat="completed">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-value" id="completedTopics">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card" data-stat="streak">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-value" id="currentStreak">0</div>
+                            <div class="stat-label">Day Streak</div>
+                        </div>
+                        <div class="stat-card" data-stat="mastery">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-value" id="masteryLevel">0%</div>
+                            <div class="stat-label">Mastery</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="categories-section">
+                <h2 class="section-title">Study Categories</h2>
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be populated by JS -->
+                </div>
+            </div>
+
+            <div class="recent-section">
+                <h2 class="section-title">Continue Studying</h2>
+                <div class="recent-topics" id="recentTopics">
+                    <div class="empty-state">
+                        <span class="empty-icon">📚</span>
+                        <p>Start exploring topics to see your recent activity here!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Topics View -->
+        <section class="view topics-view" id="topicsView">
+            <div class="topics-header">
+                <div class="topics-title-section">
+                    <h1 class="page-title">Study Topics</h1>
+                    <p class="page-subtitle">66 comprehensive topics covering the complete CCNA 200-301 curriculum</p>
+                </div>
+                <div class="topics-search">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="topicSearch" placeholder="Search topics..." class="search-input">
+                        <button class="search-clear" id="searchClear">✕</button>
+                    </div>
+                </div>
+            </div>
+            <div class="topics-filters">
+                <button class="filter-btn active" data-filter="all">All Topics</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="in-progress">In Progress</button>
+                <button class="filter-btn" data-filter="not-started">Not Started</button>
+            </div>
+            <div class="topics-list" id="topicsList">
+                <!-- Topics will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Topic Detail View -->
+        <section class="view topic-detail-view" id="topicDetailView">
+            <div class="topic-detail-header">
+                <button class="back-btn" id="backToTopics">
+                    <span>←</span> Back to Topics
+                </button>
+                <div class="topic-progress-bar">
+                    <div class="progress-fill" id="topicProgressFill"></div>
+                </div>
+            </div>
+            <div class="topic-detail-content" id="topicDetailContent">
+                <!-- Topic content will be loaded here -->
+            </div>
+            <div class="topic-detail-actions">
+                <button class="btn btn-secondary" id="markAsRead">
+                    <span>✓</span> Mark as Complete
+                </button>
+                <button class="btn btn-primary" id="createFlashcards">
+                    <span>🎴</span> Create Flashcards
+                </button>
+            </div>
+        </section>
+
+        <!-- Flashcards View -->
+        <section class="view flashcards-view" id="flashcardsView">
+            <div class="flashcards-header">
+                <h1 class="page-title">Flashcards</h1>
+                <p class="page-subtitle">Review key concepts with spaced repetition</p>
+            </div>
+            <div class="flashcard-deck-selector" id="deckSelector">
+                <!-- Deck selection will be populated by JS -->
+            </div>
+            <div class="flashcard-container">
+                <div class="flashcard-progress">
+                    <span id="cardProgress">0 / 0</span>
+                </div>
+                <div class="flashcard-wrapper">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="flashcard-content" id="flashcardFront">
+                                    Click to start
+                                </div>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="flashcard-content" id="flashcardBack">
+                                    Answer will appear here
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flashcard-controls">
+                    <button class="fc-btn fc-incorrect" id="fcIncorrect" title="I didn't know this">
+                        <span>❌</span>
+                        <span>Again</span>
+                    </button>
+                    <button class="fc-btn fc-flip" id="fcFlip" title="Flip card">
+                        <span>🔄</span>
+                        <span>Flip</span>
+                    </button>
+                    <button class="fc-btn fc-correct" id="fcCorrect" title="I knew this">
+                        <span>✅</span>
+                        <span>Got it</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz View -->
+        <section class="view quiz-view" id="quizView">
+            <div class="quiz-header">
+                <h1 class="page-title">Quiz Mode</h1>
+                <p class="page-subtitle">Test your knowledge with interactive quizzes</p>
+            </div>
+            <div class="quiz-setup" id="quizSetup">
+                <div class="quiz-options">
+                    <h3>Select Quiz Topic</h3>
+                    <div class="quiz-topic-grid" id="quizTopicGrid">
+                        <!-- Quiz topics will be populated -->
+                    </div>
+                    <h3>Number of Questions</h3>
+                    <div class="question-count-selector">
+                        <button class="count-btn" data-count="5">5</button>
+                        <button class="count-btn active" data-count="10">10</button>
+                        <button class="count-btn" data-count="20">20</button>
+                        <button class="count-btn" data-count="all">All</button>
+                    </div>
+                    <button class="btn btn-primary btn-lg start-quiz-btn" id="startQuizBtn">
+                        <span>🚀</span> Start Quiz
+                    </button>
+                </div>
+            </div>
+            <div class="quiz-active" id="quizActive" style="display: none;">
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgressFill"></div>
+                </div>
+                <div class="quiz-question-counter">
+                    Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span>
+                </div>
+                <div class="quiz-question-card">
+                    <div class="question-text" id="questionText"></div>
+                    <div class="answer-options" id="answerOptions">
+                        <!-- Options will be populated -->
+                    </div>
+                </div>
+                <div class="quiz-timer" id="quizTimer">
+                    <span class="timer-icon">⏱️</span>
+                    <span class="timer-value" id="timerValue">30</span>
+                </div>
+            </div>
+            <div class="quiz-results" id="quizResults" style="display: none;">
+                <div class="results-card">
+                    <div class="results-icon" id="resultsIcon">🏆</div>
+                    <h2 class="results-title" id="resultsTitle">Great Job!</h2>
+                    <div class="results-score">
+                        <span class="score-value" id="scoreValue">0</span>
+                        <span class="score-max">/ 10</span>
+                    </div>
+                    <div class="results-percentage" id="resultsPercentage">0%</div>
+                    <div class="results-breakdown" id="resultsBreakdown">
+                        <!-- Breakdown will be populated -->
+                    </div>
+                    <div class="results-actions">
+                        <button class="btn btn-secondary" id="reviewQuiz">Review Answers</button>
+                        <button class="btn btn-primary" id="retryQuiz">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress View -->
+        <section class="view progress-view" id="progressView">
+            <div class="progress-header">
+                <h1 class="page-title">Your Progress</h1>
+                <p class="page-subtitle">Track your learning journey</p>
+            </div>
+            <div class="progress-overview">
+                <div class="progress-ring-container">
+                    <svg class="progress-ring" viewBox="0 0 200 200">
+                        <circle class="progress-ring-bg" cx="100" cy="100" r="90"/>
+                        <circle class="progress-ring-fill" cx="100" cy="100" r="90" id="progressRingFill"/>
+                    </svg>
+                    <div class="progress-ring-text">
+                        <span class="progress-percent" id="overallProgress">0%</span>
+                        <span class="progress-label">Complete</span>
+                    </div>
+                </div>
+                <div class="progress-stats">
+                    <div class="progress-stat">
+                        <span class="stat-number" id="topicsStudied">0</span>
+                        <span class="stat-text">Topics Studied</span>
+                    </div>
+                    <div class="progress-stat">
+                        <span class="stat-number" id="flashcardsReviewed">0</span>
+                        <span class="stat-text">Flashcards Reviewed</span>
+                    </div>
+                    <div class="progress-stat">
+                        <span class="stat-number" id="quizzesTaken">0</span>
+                        <span class="stat-text">Quizzes Completed</span>
+                    </div>
+                    <div class="progress-stat">
+                        <span class="stat-number" id="avgScore">0%</span>
+                        <span class="stat-text">Average Quiz Score</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-chart-section">
+                <h3>Activity This Week</h3>
+                <div class="activity-chart" id="activityChart">
+                    <div class="chart-bar" data-day="Mon"><div class="bar-fill" style="height: 20%"></div><span>Mon</span></div>
+                    <div class="chart-bar" data-day="Tue"><div class="bar-fill" style="height: 45%"></div><span>Tue</span></div>
+                    <div class="chart-bar" data-day="Wed"><div class="bar-fill" style="height: 70%"></div><span>Wed</span></div>
+                    <div class="chart-bar" data-day="Thu"><div class="bar-fill" style="height: 30%"></div><span>Thu</span></div>
+                    <div class="chart-bar" data-day="Fri"><div class="bar-fill" style="height: 85%"></div><span>Fri</span></div>
+                    <div class="chart-bar" data-day="Sat"><div class="bar-fill" style="height: 50%"></div><span>Sat</span></div>
+                    <div class="chart-bar today" data-day="Sun"><div class="bar-fill" style="height: 60%"></div><span>Sun</span></div>
+                </div>
+            </div>
+            <div class="achievements-section">
+                <h3>Achievements</h3>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <div class="achievement unlocked">
+                        <span class="achievement-icon">🎯</span>
+                        <span class="achievement-name">First Steps</span>
+                        <span class="achievement-desc">Complete your first topic</span>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-icon">🔥</span>
+                        <span class="achievement-name">On Fire</span>
+                        <span class="achievement-desc">7-day study streak</span>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-icon">🧠</span>
+                        <span class="achievement-name">Quiz Master</span>
+                        <span class="achievement-desc">Score 100% on a quiz</span>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-icon">📚</span>
+                        <span class="achievement-name">Scholar</span>
+                        <span class="achievement-desc">Complete 30 topics</span>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-icon">⚡</span>
+                        <span class="achievement-name">Speed Demon</span>
+                        <span class="achievement-desc">Complete a quiz in under 1 minute</span>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-icon">🏆</span>
+                        <span class="achievement-name">CCNA Ready</span>
+                        <span class="achievement-desc">Complete all 66 topics</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner-ring"></div>
+            <span class="loading-text">Loading...</span>
+        </div>
+    </div>
+
+    <script src="app.js" type="module"></script>
+</body>
+</html>
