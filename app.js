@@ -565,24 +565,8 @@ class CCNAStudyHub {
     }
 
     getBasePath() {
-        // Handle GitHub Pages base path
-        const path = window.location.pathname;
-
-        // Check if we're on GitHub Pages with a repo name (e.g., /CCNA_Course_Notes/)
-        const segments = path.split('/').filter(Boolean);
-
-        // If on GitHub Pages: /CCNA_Course_Notes/ or /CCNA_Course_Notes/index.html
-        // We need to return /CCNA_Course_Notes/ to access /CCNA_Course_Notes/Course_Notes/
-        if (segments.length > 0) {
-            const repoName = segments[0];
-            // Check if this looks like a GitHub Pages repo path
-            if (repoName && !repoName.includes('.')) {
-                return `/${repoName}/`;
-            }
-        }
-
-        // Local development: docs folder, need to go up one level
-        return '../';
+        // Files are at root level, same as Course_Notes folder
+        return './';
     }
 
     parseMarkdown(markdown) {
