@@ -170,17 +170,17 @@ class AppState {
     updateStreak() {
         const today = new Date().toDateString();
         const lastDate = this.progress.lastStudyDate;
-        
+
         if (lastDate !== today) {
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
-            
+
             if (lastDate === yesterday.toDateString()) {
                 this.progress.streak++;
             } else if (lastDate !== today) {
                 this.progress.streak = 1;
             }
-            
+
             this.progress.lastStudyDate = today;
             this.saveProgress();
         }
@@ -207,27 +207,27 @@ class AppState {
 
     checkAchievements() {
         const achievements = this.progress.achievements;
-        
+
         if (this.progress.completedTopics.length >= 1 && !achievements.includes('first_steps')) {
             achievements.push('first_steps');
             showToast('🎯', 'Achievement Unlocked!', 'First Steps - Completed your first topic');
         }
-        
+
         if (this.progress.streak >= 7 && !achievements.includes('on_fire')) {
             achievements.push('on_fire');
             showToast('🔥', 'Achievement Unlocked!', 'On Fire - 7-day study streak');
         }
-        
+
         if (this.progress.completedTopics.length >= 30 && !achievements.includes('scholar')) {
             achievements.push('scholar');
             showToast('📚', 'Achievement Unlocked!', 'Scholar - Completed 30 topics');
         }
-        
+
         if (this.progress.completedTopics.length >= 66 && !achievements.includes('ccna_ready')) {
             achievements.push('ccna_ready');
             showToast('🏆', 'Achievement Unlocked!', 'CCNA Ready - Completed all 66 topics!');
         }
-        
+
         this.saveProgress();
     }
 }
@@ -403,7 +403,7 @@ class CCNAStudyHub {
         if (!grid) return;
 
         grid.innerHTML = Object.entries(CATEGORIES).map(([name, data]) => {
-            const completed = data.topics.filter(t => 
+            const completed = data.topics.filter(t =>
                 this.state.progress.completedTopics.includes(t.id)
             ).length;
             const total = data.topics.length;
@@ -441,8 +441,8 @@ class CCNAStudyHub {
         if (filter === 'completed') {
             topics = topics.filter(t => this.state.progress.completedTopics.includes(t.id));
         } else if (filter === 'in-progress') {
-            topics = topics.filter(t => 
-                this.state.progress.topicsViewed.includes(t.id) && 
+            topics = topics.filter(t =>
+                this.state.progress.topicsViewed.includes(t.id) &&
                 !this.state.progress.completedTopics.includes(t.id)
             );
         } else if (filter === 'not-started') {
@@ -452,10 +452,10 @@ class CCNAStudyHub {
         list.innerHTML = topics.map(topic => {
             const isCompleted = this.state.progress.completedTopics.includes(topic.id);
             const isViewed = this.state.progress.topicsViewed.includes(topic.id);
-            
+
             let statusClass = '';
             let statusText = 'Not started';
-            
+
             if (isCompleted) {
                 statusClass = 'completed';
                 statusText = 'Completed';
@@ -498,7 +498,7 @@ class CCNAStudyHub {
         items.forEach(item => {
             const topicId = parseInt(item.dataset.topicId);
             const topic = COURSE_TOPICS[topicId];
-            const matchesSearch = !searchTerm || 
+            const matchesSearch = !searchTerm ||
                 topic.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 topic.category.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -530,9 +530,9 @@ class CCNAStudyHub {
             // For GitHub Pages, we need to fetch from the Course_Notes folder
             const basePath = this.getBasePath();
             const response = await fetch(`${basePath}Course_Notes/${topic.file}`);
-            
+
             if (!response.ok) throw new Error('Failed to load topic');
-            
+
             const markdown = await response.text();
             contentDiv.innerHTML = this.parseMarkdown(markdown);
 
@@ -567,20 +567,21 @@ class CCNAStudyHub {
     getBasePath() {
         // Handle GitHub Pages base path
         const path = window.location.pathname;
-        
-        // If we're in a subdirectory (like /study-app/), go up one level
-        if (path.includes('/study-app')) {
-            // We're in the study-app folder, need to go up to Course_Notes
-            return '../';
-        }
-        
-        // Check if we're on GitHub Pages with a repo name
+
+        // Check if we're on GitHub Pages with a repo name (e.g., /CCNA_Course_Notes/)
         const segments = path.split('/').filter(Boolean);
-        if (segments.length > 0 && segments[0] !== 'study-app') {
-            // Likely on GitHub Pages with repo name prefix
-            return `/${segments[0]}/`;
+
+        // If on GitHub Pages: /CCNA_Course_Notes/ or /CCNA_Course_Notes/index.html
+        // We need to return /CCNA_Course_Notes/ to access /CCNA_Course_Notes/Course_Notes/
+        if (segments.length > 0) {
+            const repoName = segments[0];
+            // Check if this looks like a GitHub Pages repo path
+            if (repoName && !repoName.includes('.')) {
+                return `/${repoName}/`;
+            }
         }
-        
+
+        // Local development: docs folder, need to go up one level
         return '../';
     }
 
@@ -630,11 +631,11 @@ class CCNAStudyHub {
 
     updateStats() {
         const progress = this.state.progress;
-        
+
         document.getElementById('completedTopics').textContent = progress.completedTopics.length;
         document.getElementById('currentStreak').textContent = progress.streak;
         document.getElementById('streakCount').textContent = progress.streak;
-        
+
         const mastery = Math.round((progress.completedTopics.length / COURSE_TOPICS.length) * 100);
         document.getElementById('masteryLevel').textContent = `${mastery}%`;
     }
@@ -671,8 +672,8 @@ class CCNAStudyHub {
 
     loadFlashcardDeck(deckName) {
         // Generate flashcards from topics
-        let topics = deckName === 'all' 
-            ? COURSE_TOPICS 
+        let topics = deckName === 'all'
+            ? COURSE_TOPICS
             : COURSE_TOPICS.filter(t => t.category === deckName);
 
         // Create basic flashcards from topic titles and categories
@@ -731,8 +732,8 @@ class CCNAStudyHub {
     shuffleFlashcards() {
         for (let i = this.activeFlashcards.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [this.activeFlashcards[i], this.activeFlashcards[j]] = 
-            [this.activeFlashcards[j], this.activeFlashcards[i]];
+            [this.activeFlashcards[i], this.activeFlashcards[j]] =
+                [this.activeFlashcards[j], this.activeFlashcards[i]];
         }
     }
 
@@ -747,7 +748,7 @@ class CCNAStudyHub {
         document.getElementById('flashcardFront').textContent = card.front;
         document.getElementById('flashcardBack').textContent = card.back;
         document.getElementById('flashcard').classList.remove('flipped');
-        document.getElementById('cardProgress').textContent = 
+        document.getElementById('cardProgress').textContent =
             `${this.currentFlashcardIndex + 1} / ${this.activeFlashcards.length}`;
     }
 
@@ -758,7 +759,7 @@ class CCNAStudyHub {
         }
 
         this.currentFlashcardIndex++;
-        
+
         if (this.currentFlashcardIndex >= this.activeFlashcards.length) {
             this.currentFlashcardIndex = 0;
             this.shuffleFlashcards();
@@ -802,7 +803,7 @@ class CCNAStudyHub {
 
         // Generate quiz questions
         const questions = this.generateQuizQuestions(category, count);
-        
+
         if (questions.length === 0) {
             showToast('⚠️', 'No Questions', 'No questions available for this category');
             return;
@@ -950,8 +951,8 @@ class CCNAStudyHub {
         ];
 
         // Filter by category
-        let filtered = category === 'All Topics' 
-            ? allQuestions 
+        let filtered = category === 'All Topics'
+            ? allQuestions
             : allQuestions.filter(q => q.category === category);
 
         // Shuffle and limit
@@ -969,7 +970,7 @@ class CCNAStudyHub {
 
         document.getElementById('currentQuestion').textContent = currentIndex + 1;
         document.getElementById('questionText').textContent = question.question;
-        
+
         const progress = ((currentIndex) / questions.length) * 100;
         document.getElementById('quizProgressFill').style.width = `${progress}%`;
 
@@ -1013,7 +1014,7 @@ class CCNAStudyHub {
         // Move to next question after delay
         setTimeout(() => {
             this.state.quizState.currentIndex++;
-            
+
             if (this.state.quizState.currentIndex >= questions.length) {
                 this.showQuizResults();
             } else {
@@ -1031,7 +1032,7 @@ class CCNAStudyHub {
 
         document.getElementById('scoreValue').textContent = score;
         document.getElementById('resultsPercentage').textContent = `${percentage}%`;
-        
+
         // Update max score display
         document.querySelector('.score-max').textContent = `/ ${questions.length}`;
 
@@ -1057,13 +1058,13 @@ class CCNAStudyHub {
         // Update progress
         this.state.progress.quizzesTaken++;
         this.state.progress.quizScores.push(percentage);
-        
+
         // Check for perfect score achievement
         if (percentage === 100 && !this.state.progress.achievements.includes('quiz_master')) {
             this.state.progress.achievements.push('quiz_master');
             showToast('🧠', 'Achievement Unlocked!', 'Quiz Master - Scored 100% on a quiz!');
         }
-        
+
         this.state.saveProgress();
         this.updateStats();
     }
@@ -1080,12 +1081,12 @@ class CCNAStudyHub {
     updateProgressView() {
         const progress = this.state.progress;
         const percentage = Math.round((progress.completedTopics.length / COURSE_TOPICS.length) * 100);
-        
+
         document.getElementById('overallProgress').textContent = `${percentage}%`;
         document.getElementById('topicsStudied').textContent = progress.topicsViewed.length;
         document.getElementById('flashcardsReviewed').textContent = progress.flashcardsReviewed;
         document.getElementById('quizzesTaken').textContent = progress.quizzesTaken;
-        
+
         const avgScore = progress.quizScores.length > 0
             ? Math.round(progress.quizScores.reduce((a, b) => a + b, 0) / progress.quizScores.length)
             : 0;
@@ -1150,7 +1151,7 @@ function showToast(icon, title, message) {
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new CCNAStudyHub();
-    
+
     // Add SVG gradient for progress ring
     const svg = document.querySelector('.progress-ring');
     if (svg) {
